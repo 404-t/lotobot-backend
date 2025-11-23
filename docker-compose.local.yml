@@ -1,21 +1,6 @@
 version: '3.9'
 
 services:
-  db:
-    image: postgres:17.5
-    container_name: db-container
-    restart: unless-stopped
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - app_network
-
 
   redis:
     image: redis:latest
@@ -30,28 +15,8 @@ services:
     restart: unless-stopped
 
 
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: pgadmin-container
-    restart: unless-stopped
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=${SMTP_USER}
-      - PGADMIN_DEFAULT_PASSWORD=${POSTGRES_PASSWORD}
-      - PGADMIN_LISTEN_PORT=5050
-    ports:
-      - "5050:5050"
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    depends_on:
-      - db
-    networks:
-      - app_network
-
-
 volumes:
-  postgres_data:
   redis_data:
-  pgadmin_data:
 
 networks:
   app_network:
