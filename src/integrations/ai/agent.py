@@ -80,14 +80,14 @@ class Agent:
         """Загружает данные из СтоЛото в RAG систему."""
         start_time = time.time()
         try:
-            logger.info('Agent: Начало загрузки данных из СтоЛото в RAG')
+            logger.debug('Agent: Начало загрузки данных из СтоЛото в RAG')
             # Получаем данные от всех клиентов
             fetch_start = time.time()
             main_data = await self.main_client.get()
             tabs_data = await self.tabs_client.get()
             list_data = await self.list_client.get()
             fetch_time = time.time() - fetch_start
-            logger.info(f'Agent: Данные получены от клиентов за {fetch_time:.2f}с')
+            logger.debug(f'Agent: Данные получены от клиентов за {fetch_time:.2f}с')
 
             # Подсчитываем размеры данных
             main_size = len(str(main_data.model_dump())) if main_data else 0
@@ -111,7 +111,7 @@ class Agent:
             # Загружаем в RAG систему
             await self.rag.load_from_stoloto_data(stoloto_data)
             total_time = time.time() - start_time
-            logger.info(
+            logger.debug(
                 f'Agent: Данные СтоЛото загружены в RAG систему за {total_time:.2f}с. '
                 f'Элементов в RAG: {len(self.rag.data)}'
             )
@@ -150,7 +150,7 @@ class Agent:
 
         keywords = response.choices[0].message.content
         total_time = time.time() - start_time
-        logger.info(
+        logger.debug(
             f'Agent: Ключевые слова извлечены за {total_time:.2f}с (LLM: {llm_time:.2f}с). '
             f'Результат: "{keywords[:100]}..."'
         )
@@ -186,7 +186,7 @@ class Agent:
         intent_raw = response.choices[0].message.content.strip().lower()
         intent = 'search' if 'search' in intent_raw else 'answer'
         total_time = time.time() - start_time
-        logger.info(
+        logger.debug(
             f'Agent: Намерение определено за {total_time:.2f}с (LLM: {llm_time:.2f}с). '
             f'Результат: "{intent}" (raw: "{intent_raw}")'
         )
@@ -210,7 +210,7 @@ class Agent:
             Словарь с action и content
         """
         process_start = time.time()
-        logger.info(f'Agent: Начало обработки запроса (длина: {len(user_query)}, контекст: {len(chat_context) if chat_context else 0} сообщений)')
+        logger.debug(f'Agent: Начало обработки запроса (длина: {len(user_query)}, контекст: {len(chat_context) if chat_context else 0} сообщений)')
 
         # Загружаем данные в RAG при первом использовании или при необходимости обновления
         if not self.rag.data or force_refresh_rag:
@@ -222,7 +222,7 @@ class Agent:
         intent = await self._detect_intent(user_query, chat_context)
 
         if intent == 'search':
-            logger.info('Agent: Обработка запроса как поиск')
+            logger.debug('Agent: Обработка запроса как поиск')
             # Извлекаем ключевые слова
             keywords = await self.extract_keywords(user_query, chat_context)
 
@@ -246,9 +246,9 @@ class Agent:
                 )
                 llm_time = time.time() - llm_start
                 content = response.choices[0].message.content
-                logger.info(f'Agent: LLM ответ получен за {llm_time:.2f}с (общий ответ, результатов не найдено)')
+                logger.debug(f'Agent: LLM ответ получен за {llm_time:.2f}с (общий ответ, результатов не найдено)')
             else:
-                logger.info(f'Agent: RAG нашёл {len(rag_results)} результатов, отправка в LLM для анализа')
+                logger.debug(f'Agent: RAG нашёл {len(rag_results)} результатов, отправка в LLM для анализа')
                 # Форматируем результаты для анализа
                 lotteries_text = []
                 for i, r in enumerate(rag_results, 1):
@@ -276,7 +276,7 @@ class Agent:
                 )
                 llm_time = time.time() - llm_start
                 content = response.choices[0].message.content
-                logger.info(f'Agent: LLM анализ выполнен за {llm_time:.2f}с, размер ответа: {len(content)} символов')
+                logger.debug(f'Agent: LLM анализ выполнен за {llm_time:.2f}с, размер ответа: {len(content)} символов')
 
                 # Пытаемся распарсить JSON
                 try:
@@ -286,7 +286,7 @@ class Agent:
                 except json.JSONDecodeError:
                     logger.warning('Agent: Не удалось распарсить ответ как JSON, возвращаю как строку')
         else:
-            logger.info('Agent: Обработка запроса как общий вопрос')
+            logger.debug('Agent: Обработка запроса как общий вопрос')
             messages = [{'role': 'system', 'content': self.conversation_prompt}]
             if chat_context:
                 messages.extend(chat_context)
@@ -302,7 +302,7 @@ class Agent:
             )
             llm_time = time.time() - llm_start
             content = response.choices[0].message.content
-            logger.info(f'Agent: LLM общий ответ получен за {llm_time:.2f}с, размер ответа: {len(content)} символов')
+            logger.debug(f'Agent: LLM общий ответ получен за {llm_time:.2f}с, размер ответа: {len(content)} символов')
 
         total_time = time.time() - process_start
         logger.info(

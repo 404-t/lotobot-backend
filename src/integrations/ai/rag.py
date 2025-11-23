@@ -135,16 +135,16 @@ class RAGSystem:
             total_text_length = sum(len(text) for text in texts)
             avg_text_length = total_text_length / len(texts) if texts else 0
 
-            logger.info(
+            logger.debug(
                 f'RAG: Обработано элементов - main: {stats["main"]}, packets: {stats["packets"]}, tabs: {stats["tabs"]}, '
                 f'всего: {len(texts)}'
             )
-            logger.info(
+            logger.debug(
                 f'RAG: Размер данных - всего символов: {total_text_length}, средний размер текста: {avg_text_length:.1f}'
             )
 
             if texts:
-                logger.info(f'RAG: Создание эмбеддингов для {len(texts)} элементов...')
+                logger.debug(f'RAG: Создание эмбеддингов для {len(texts)} элементов...')
                 embed_start = time.time()
                 # Выполняем в отдельном потоке, чтобы не блокировать event loop
                 self.embeddings = await asyncio.to_thread(
@@ -153,7 +153,7 @@ class RAGSystem:
                 )
                 embed_time = time.time() - embed_start
                 embedding_shape = self.embeddings.shape if self.embeddings is not None else None
-                logger.info(
+                logger.debug(
                     f'RAG: Эмбеддинги созданы успешно за {embed_time:.2f}с. '
                     f'Размерность: {embedding_shape}, размер в памяти: ~{self.embeddings.nbytes / 1024 / 1024:.2f} MB'
                 )
@@ -162,7 +162,7 @@ class RAGSystem:
                 self.embeddings = None
 
             total_time = time.time() - start_time
-            logger.info(f'RAG: Загрузка данных завершена за {total_time:.2f}с')
+            logger.debug(f'RAG: Загрузка данных завершена за {total_time:.2f}с')
 
     def _extract_lottery_info(self, content_item: dict[str, Any]) -> dict[str, Any] | None:
         """Извлекает информацию о лотерее из элемента контента."""
@@ -235,7 +235,7 @@ class RAGSystem:
             logger.debug(f'RAG Search: Результат #{len(results)} - тип: {self.data[idx].get("type")}, score: {score:.4f}')
 
         total_time = time.time() - start_time
-        logger.info(
+        logger.debug(
             f'RAG Search: Найдено {len(results)} результатов за {total_time:.3f}с '
             f'(encode: {encode_time:.3f}с, similarity: {similarity_time:.3f}с)'
         )

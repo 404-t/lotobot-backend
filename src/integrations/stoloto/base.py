@@ -100,7 +100,7 @@ class BaseStolotoSection(ABC, Generic[T]):
             if cached_data:
                 return cached_data
 
-        logger.info(f"Fetching data from API for section: {self.__class__.__name__}")
+        logger.debug(f"Fetching data from API for section: {self.__class__.__name__}")
         fresh_data = await self._fetch_from_api()
         await self._save_to_cache(fresh_data)
         return fresh_data
