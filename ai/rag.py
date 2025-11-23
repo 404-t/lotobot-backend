@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 from sentence_transformers import SentenceTransformer
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
@@ -10,7 +11,7 @@ class RAGSystem:
         self.embeddings = None
     
     def load_json(self, filepath):
-        with open(filepath, "r", encoding="utf-8") as f:
+        with Path(filepath).open(encoding="utf-8") as f:
             data = json.load(f)
         
         texts = []

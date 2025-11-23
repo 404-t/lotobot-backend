@@ -3,6 +3,7 @@ from lotobot.rag import RAGSystem
 import os
 import json
 from dotenv import load_dotenv
+from pathlib import Path
 
 
 load_dotenv()
@@ -13,15 +14,15 @@ class Agent:
             base_url="https://openrouter.ai/api/v1",
             api_key=os.getenv("API_KEY"),
         )
-        with open("lotobot/system_prompt.txt", "r", encoding="utf-8") as f:
+        with Path("lotobot/system_prompt.txt").open(encoding="utf-8") as f:
             self.system_prompt = f.read()
-        with open("lotobot/analysis_prompt.txt", "r", encoding="utf-8") as f:
+        with Path("lotobot/analysis_prompt.txt").open(encoding="utf-8") as f:
             self.analysis_prompt = f.read()
-        with open("lotobot/archive_analysis_prompt.txt", "r", encoding="utf-8") as f:
+        with Path("lotobot/archive_analysis_prompt.txt").open(encoding="utf-8") as f:
             self.archive_analysis_prompt = f.read()
-        with open("lotobot/intent_prompt.txt", "r", encoding="utf-8") as f:
+        with Path("lotobot/intent_prompt.txt").open(encoding="utf-8") as f:
             self.intent_prompt = f.read()
-        with open("lotobot/conversation_prompt.txt", "r", encoding="utf-8") as f:
+        with Path("lotobot/conversation_prompt.txt").open(encoding="utf-8") as f:
             self.conversation_prompt = f.read()
         
         self.rag = RAGSystem()
@@ -36,10 +37,9 @@ class Agent:
                 else:
                     parts.append(f"{key}: {value}")
             return ", ".join(parts)
-        elif isinstance(obj, list):
+        if isinstance(obj, list):
             return ", ".join(str(self._dict_to_string(item)) for item in obj)
-        else:
-            return str(obj)
+        return str(obj)
     
     def extract_keywords(self, text, chat_context=None):
         messages = [{"role": "system", "content": self.system_prompt}]

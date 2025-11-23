@@ -11,7 +11,6 @@ from src.integrations.ai.rag import RAGSystem
 from src.integrations.stoloto import (
     StolotoClient,
     MainStolotoClient,
-    NewsStolotoClient,
     TabsStolotoClient,
     ListStolotoClient,
 )

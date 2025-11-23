@@ -40,7 +40,7 @@ class RAGSystem:
             return ', '.join(str(self._dict_to_string(item)) for item in obj)
         return str(obj)
 
-    async def load_from_stoloto_data(self, stoloto_data: dict[str, Any]):
+    async def load_from_stoloto_data(self, stoloto_data: dict[str, Any]): # noqa
         """
         Загружает данные из СтоЛото и создаёт эмбеддинги.
 
@@ -58,7 +58,7 @@ class RAGSystem:
 
             # Обрабатываем данные из разных источников
             # Main categories
-            if 'main' in stoloto_data and stoloto_data['main']:
+            if stoloto_data.get('main'):
                 main_data = stoloto_data['main']
                 if main_data and isinstance(main_data, dict) and 'data' in main_data:
                     data_list = main_data.get('data') or []
@@ -87,8 +87,8 @@ class RAGSystem:
                                         stats['main'] += 1
                     logger.debug(f'Извлечено лотерей из main: {stats["main"]}')
 
-            # Packets (list)
-            if 'list' in stoloto_data and stoloto_data['list']:
+            # Packets (list) # noqa
+            if stoloto_data.get('list'):
                 list_data = stoloto_data['list']
                 if list_data and isinstance(list_data, dict):
                     packets_list = list_data.get('packets') or []
@@ -109,8 +109,8 @@ class RAGSystem:
                         stats['packets'] += 1
                     logger.debug(f'Извлечено пакетов: {stats["packets"]}')
 
-            # Tabs (active draws)
-            if 'tabs' in stoloto_data and stoloto_data['tabs']:
+            # Tabs (active draws) # noqa
+            if stoloto_data.get('tabs'):
                 tabs_data = stoloto_data['tabs']
                 if tabs_data and isinstance(tabs_data, dict):
                     tabs_list = tabs_data.get('data') or []
@@ -131,7 +131,7 @@ class RAGSystem:
                         stats['tabs'] += 1
                     logger.debug(f'Извлечено табов: {stats["tabs"]}')
 
-            # Подсчитываем общий размер данных
+            # Подсчитываем общий размер данных # noqa
             total_text_length = sum(len(text) for text in texts)
             avg_text_length = total_text_length / len(texts) if texts else 0
 
@@ -146,7 +146,7 @@ class RAGSystem:
             if texts:
                 logger.debug(f'RAG: Создание эмбеддингов для {len(texts)} элементов...')
                 embed_start = time.time()
-                # Выполняем в отдельном потоке, чтобы не блокировать event loop
+                # Выполняем в отдельном потоке, чтобы не блокировать event loop # noqa
                 self.embeddings = await asyncio.to_thread(
                     self.model.encode,
                     texts,

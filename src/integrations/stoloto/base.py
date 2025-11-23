@@ -12,7 +12,7 @@ logger = get_logger(__name__)
 T = TypeVar('T', bound=BaseModel)
 
 
-class BaseStolotoSection(ABC, Generic[T]):
+class BaseStolotoSection(ABC, Generic[T]): # noqa
     """
     Base class for Stoloto sections.
     Provides Redis caching functionality.

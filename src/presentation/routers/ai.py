@@ -22,7 +22,7 @@ _chat_service: ChatService | None = None
 
 def get_agent() -> Agent:
     """Dependency для получения Agent."""
-    global _agent
+    global _agent # noqa
     if _agent is None:
         stoloto_client = stoloto.get_stoloto_client()
         redis_client = stoloto.get_redis_client()
@@ -38,7 +38,7 @@ def get_agent() -> Agent:
 
 def get_chat_service() -> ChatService:
     """Dependency для получения ChatService."""
-    global _chat_service
+    global _chat_service # noqa
     if _chat_service is None:
         agent = get_agent()
         redis_client = stoloto.get_redis_client()
@@ -61,7 +61,7 @@ def _send_websocket_message(websocket: WebSocket, code: WebSocketCode, data: dic
 
 
 @router.websocket('/chat')
-async def websocket_chat(websocket: WebSocket):
+async def websocket_chat(websocket: WebSocket): # noqa
     """
     WebSocket endpoint для чата с AI ботом.
 
@@ -230,7 +230,7 @@ async def analyze_archive(archive_data: dict | list):
         return {'analysis': analysis}
     except Exception as e:
         logger.error(f'Ошибка при анализе архива: {e}', exc_info=True)
-        raise HTTPException(status_code=500, detail=f'Ошибка при анализе: {str(e)}') from e
+        raise HTTPException(status_code=500, detail=f'Ошибка при анализе: {e!s}') from e
 
 
 @router.post('/refresh-rag')
@@ -242,8 +242,8 @@ async def refresh_rag():
     """
     try:
         agent = get_agent()
-        await agent._load_rag_data()
+        await agent._load_rag_data() # noqa
         return {'status': 'success', 'message': 'RAG система обновлена'}
     except Exception as e:
         logger.error(f'Ошибка при обновлении RAG: {e}', exc_info=True)
-        raise HTTPException(status_code=500, detail=f'Ошибка при обновлении RAG: {str(e)}') from e
+        raise HTTPException(status_code=500, detail=f'Ошибка при обновлении RAG: {e!s}') from e

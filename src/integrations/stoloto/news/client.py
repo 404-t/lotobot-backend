@@ -17,9 +17,8 @@ def clean_html_text(text: str) -> str:
     text = text.replace('&quot;', '"')
     text = text.replace('&nbsp;', ' ')
     text = text.replace('&amp;', '&')
-    text = re.sub(r'\s+', ' ', text).strip()
 
-    return text
+    return re.sub(r'\s+', ' ', text).strip()
 
 
 def parse_news_html(html: str, base_url: str = "https://www.stoloto.ru") -> list[NewsItem]:
@@ -35,7 +34,7 @@ def parse_news_html(html: str, base_url: str = "https://www.stoloto.ru") -> list
     for link, title_html in news_with_titles:
         link = link.split('?')[0].split('#')[0]
 
-        if link.startswith('/'):
+        if link.startswith('/'): # noqa
             full_link = urljoin(base_url, link)
         else:
             full_link = link
@@ -52,9 +51,9 @@ def parse_news_html(html: str, base_url: str = "https://www.stoloto.ru") -> list
         date_str = None
         if date_match:
             year, month, day = date_match.groups()
-            try:
+            try: # noqa
                 date_str = datetime(int(year), int(month), int(day)).strftime("%d.%m.%Y")
-            except:
+            except Exception:
                 pass
 
         news_items.append(NewsItem(

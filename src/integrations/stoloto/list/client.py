@@ -15,10 +15,8 @@ def clean_html(text: str) -> str:
     text = text.replace('&quot;', '"')
     text = text.replace('&nbsp;', ' ')
     text = text.replace('&amp;', '&')
-    text = re.sub(r'\s+', ' ', text).strip()
 
-    return text
-
+    return re.sub(r'\s+', ' ', text).strip()
 
 class ListStolotoClient(BaseStolotoSection[PacketsResponse]):
     """Client for fetching packet list from Stoloto."""

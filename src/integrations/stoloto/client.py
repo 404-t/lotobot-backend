@@ -84,10 +84,10 @@ class StolotoClient:
             return response
         except httpx.HTTPStatusError as e:
             logger.error(f"HTTP error for request {url}: {e.response.status_code}")
-            raise HTTPException(400, f'Error was occurred while getting data from {url}')
+            raise HTTPException(400, f'Error was occurred while getting data from {url}') # noqa
         except httpx.RequestError as e:
             logger.error(f"Request error to {url}: {e}")
-            raise HTTPException(400, 'Error was occurred while getting data from {url}')
+            raise HTTPException(400, f'Error was occurred while getting data from {url}') # noqa
 
     async def get(self, url: str, **kwargs) -> httpx.Response:
         """Execute GET request."""

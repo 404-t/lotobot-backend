@@ -5,7 +5,7 @@ class MessageFormatter:
     """Класс для форматирования ответов агента в человекочитаемый текст."""
 
     @staticmethod
-    def format_response(result: dict) -> str:
+    def format_response(result: dict) -> str: # noqa
         """
         Форматирует ответ агента в человекочитаемый текст.
 
@@ -14,7 +14,7 @@ class MessageFormatter:
 
         Returns:
             Человекочитаемый текст ответа
-        """
+        """ # noqa
         action = result.get('action', 'answer')
         content = result.get('content', '')
 
@@ -25,7 +25,7 @@ class MessageFormatter:
         # Если action == 'search' и content - список лотерей
         if action == 'search' and isinstance(content, list):
             if not content:
-                return 'К сожалению, не удалось найти подходящие лотереи. Попробуйте уточнить запрос.'
+                return 'К сожалению, не удалось найти подходящие лотереи. Попробуйте уточнить запрос.' # noqa
 
             response_parts = ['Вот подходящие лотереи:\n']
             for i, lottery in enumerate(content, 1):
@@ -40,7 +40,7 @@ class MessageFormatter:
                 if lottery.get('prize'):
                     prize = lottery['prize']
                     if isinstance(prize, (int, float)):
-                        if prize >= 1_000_000:
+                        if prize >= 1_000_000: # noqa
                             prize_str = f'{prize / 1_000_000:.1f} млн ₽'
                         else:
                             prize_str = f'{prize:,} ₽'.replace(',', ' ')

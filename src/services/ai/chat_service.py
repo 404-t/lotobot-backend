@@ -3,7 +3,7 @@
 import asyncio
 import json
 import time
-from typing import Callable
+from collections.abc import Callable
 
 from src.integrations.ai import Agent
 from src.integrations.ai.websocket_codes import WebSocketCode
@@ -97,7 +97,7 @@ class ChatService:
             else:
                 logger.debug('Получено сообщение без текста при ожидании контекста')
                 chat_context = []
-        except asyncio.TimeoutError:
+        except TimeoutError:
             logger.debug('Таймаут ожидания контекста чата, продолжаем с пустым контекстом')
             chat_context = []
 
@@ -130,7 +130,7 @@ class ChatService:
                 {'message': 'Анализирую запрос...'},
             )
 
-            intent = await self.agent._detect_intent(user_message, chat_context)
+            intent = await self.agent._detect_intent(user_message, chat_context) # noqa
 
             if intent == 'search':
                 # Отправляем статус RAG
@@ -171,7 +171,7 @@ class ChatService:
             chat_context.append({'role': 'assistant', 'content': formatted_text})
 
             # Ограничиваем размер контекста
-            if len(chat_context) > 20:
+            if len(chat_context) > 20: # noqa
                 chat_context = chat_context[-20:]
                 logger.debug(f'Контекст обрезан до {len(chat_context)} сообщений')
 

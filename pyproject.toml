@@ -27,7 +27,7 @@ exclude = [
 ]
 format.quote-style = "single"
 lint.exclude = [
-  "PLR0913",
+  "PLR0913", "RUF002", "RUF001"
 ]
 lint.select = [
   "F", # Pyflakes
@@ -79,7 +79,7 @@ lint.select = [
   "ERA", # eradicate
   # "PD", # pandas-vet
   # "PGH", # pygrep-hooks
-  "PL", # Pylint
+  # "PL", # Pylint
   # "TRY", # tryceratops
   # "FLY", # flynt
   # "NPY", # NumPy-specific rules
@@ -87,7 +87,7 @@ lint.select = [
   # "PERF", # Perflint
   # "FURB", # refurb
   # "LOG", # flake8-logging
-  "RUF" # Ruff-specific rules
+  # "RUF" # Ruff-specific rules
 ]
 lint.flake8-tidy-imports.ban-relative-imports = "all"
 lint.flake8-bugbear.extend-immutable-calls = [

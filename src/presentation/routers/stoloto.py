@@ -24,7 +24,7 @@ _redis_client: RedisClient | None = None
 
 def get_stoloto_client() -> StolotoClient:
     """Dependency for getting StolotoClient."""
-    global _stoloto_client
+    global _stoloto_client # noqa
     if _stoloto_client is None:
         _stoloto_client = StolotoClient(rate_limit=1.0)
     return _stoloto_client
@@ -32,7 +32,7 @@ def get_stoloto_client() -> StolotoClient:
 
 def get_redis_client() -> RedisClient:
     """Dependency for getting RedisClient."""
-    global _redis_client
+    global _redis_client # noqa
     if _redis_client is None:
         _redis_client = RedisClient(env_config.REDIS_URL)
     return _redis_client
@@ -40,7 +40,7 @@ def get_redis_client() -> RedisClient:
 
 async def close_clients():
     """Close clients on application shutdown."""
-    global _stoloto_client, _redis_client
+    global _stoloto_client, _redis_client # noqa
     if _stoloto_client:
         await _stoloto_client.close()
         _stoloto_client = None

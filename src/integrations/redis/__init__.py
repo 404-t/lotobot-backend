@@ -1,3 +1,5 @@
-from .client import RedisClient
+from src.integrations.redis.client import RedisClient
 
-__all__ = ['RedisClient']
+__all__ = [
+    "RedisClient",
+]
